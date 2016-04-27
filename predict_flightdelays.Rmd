@@ -1,0 +1,71 @@
+---
+title: "Predicting flight delays - Ruby Meetup"
+author: "Brigitte"
+date: "April 20, 2016"
+output: html_document
+---
+
+```{r}
+set.seed(100)
+setwd("~/R-scripts/Predict_Flights")
+library(caret)
+trainData <- read.csv('train.csv',sep=',', header=TRUE)
+testData <- read.csv('test.csv',sep=',', header=TRUE)
+
+trainData$ARR_DEL15 <- as.factor(trainData$ARR_DEL15)
+testData$ARR_DEL15 <- as.factor(testData$ARR_DEL15)
+trainData$DAY_OF_WEEK <- as.factor(trainData$DAY_OF_WEEK)
+testData$DAY_OF_WEEK <- as.factor(testData$DAY_OF_WEEK)
+```
+
+
+
+Now we train the model. Use a rather simple algorith first to do the classification. Then if performence not that good, go to ensemble algorithms which are usually better. Even better would be to select more important variables from the data, include additional predictor variables, or do feature-engineering.
+
+Choose Logistic regression to start with. Basically a regression that predicts a binary value. 
+```{r}
+library(caret)
+logisticRegModel <- train(ARR_DEL15 ~ ., data=trainData, method = 'glm', family = 'binomial') #the dot here stands for 'all available variables, i.e. all columns', glm is generalized linear regression, logistic regression, so set family to binomial
+
+```
+
+Now we can use the model and the test data to check how well we predict flight arrival delays.
+
+```{r}
+logRegPrediction <- predict(logisticRegModel, testData)
+logRegConfMat <- confusionMatrix(logRegPrediction, testData[,"ARR_DEL15"])
+logRegConfMat
+
+```
+
+Specificity is really low. Improve model, see what s available with names(getModelInfo()) and then try boosted tree model gbm:
+# see http://topepo.github.io/caret/training.html
+
+```{r}
+fitControl <- trainControl(method = 'repeatedcv', number = 10, repeats = 10)
+gbmFit1 <- train(ARR_DEL15 ~ ., data=trainData, method = 'gbm',trControl = fitControl,verbose = FALSE)
+
+gbmFit1
+plot(gbmFit1)
+plot(gbmFit1, metric = "Kappa")
+gbmPrediction <- predict(gbmFit1, testData)
+gbmConfMat <- confusionMatrix(gbmPrediction, testData[,"ARR_DEL15"])
+gbmConfMat
+
+
+
+```
+
+
+
+
+```{r, echo=FALSE}
+plot(gbmFit1, metric = "Kappa", plotType = "level",
+     scales = list(x = list(rot = 90)))
+```
+
+
+
+
+
+
