@@ -1,0 +1,28 @@
+---
+title: "Clustering_Example"
+author: "Brigitte"
+date: "April 25, 2016"
+output: html_document
+---
+
+Create some data
+
+```{r}
+x <- rnorm(30)
+y <- rnorm(30)
+plot(x,y)
+```
+
+
+Calculate the distances and the clusters
+
+```{r, echo=TRUE}
+datamatrix <- cbind(x,y)
+distmatrix <- dist(datamatrix)
+fit <- hclust(distmatrix, method="ward.D")
+plot(fit)
+groups <- cutree(fit, k=5)
+rect.hclust(fit, k=5, border="red")
+```
+
+

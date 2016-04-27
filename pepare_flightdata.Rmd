@@ -1,0 +1,88 @@
+---
+title: "prepare_flightdata"
+author: "Brigitte"
+date: "April 25, 2016"
+output: html_document
+---
+
+PURPOSE: Clean the data downloaded from http://1.usa.gov/1KEd08B (unzip), by removing small airports, changing format of rows, removing rows without arrival_delay information and splitting the data into train and test data.
+
+Loading data
+
+```{r}
+setwd("~/R-scripts/Predict_Flights")
+origData <- read.csv2('963742499_T_ONTIME.csv',sep=',', header=TRUE, stringsAsFactors=FALSE)
+```
+
+Checking a few things. This will show that we have many rows, so we select large airports only. Where to change this? Find the names with names() and subset() the array.
+
+```{r}
+nrow(origData)
+head(origData,3)
+names(origData)
+largeairports <- c('ATL','LAX','ORD','DFW','JFK','SFO','CLT','LAS','PHX')
+origData <- subset(origData,DEST %in% largeairports & ORIGIN %in% largeairports)
+```
+
+Try to locate duplicate fields with correlation cor() for numerical fields and != for string fields,  and remove them by setting them equal to NULL.
+
+```{r}
+head(origData)
+origData$X <- NULL #this was probably introduced at readin of data
+cor(origData[c("ORIGIN_AIRPORT_SEQ_ID","ORIGIN_AIRPORT_ID")])
+head(origData[c("ORIGIN_AIRPORT_SEQ_ID","ORIGIN_AIRPORT_ID")],3)
+cor(origData[c("DEST_AIRPORT_SEQ_ID","DEST_AIRPORT_ID")])
+sum(origData$CARRIER != origData$UNIQUE_CARRIER)
+
+origData$ORIGIN_AIRPORT_SEQ_ID <- NULL
+origData$DEST_AIRPORT_SEQ_ID <- NULL
+origData$UNIQUE_CARRIER <- NULL
+
+```
+ 
+Now make sure we have all values to be predicted, i.e. ARR_Del15 and DEP_DEL15 is either 0 or 1 in each row. 
+
+```{r}
+onTimeData <- origData[!is.na(origData$ARR_DEL15) & origData$ARR_DEL15!="" & !is.na(origData$DEP_DEL15) & origData$DEP_DEL15!="", ]
+```
+
+Are there any variables that are in a 'wrong' format?
+```{r}
+onTimeData$DISTANCE <- as.integer(onTimeData$DISTANCE)
+onTimeData$CANCELLED <- as.integer(onTimeData$CANCELLED)
+onTimeData$ARR_DEL15 <- as.factor(onTimeData$ARR_DEL15)
+onTimeData$DIVERTED <- as.integer(onTimeData$DIVERTED)
+onTimeData$DEP_DEL15 <- as.factor(onTimeData$DEP_DEL15)
+onTimeData$DEST_AIRPORT_ID <- as.factor(onTimeData$DEST_AIRPORT_ID)
+onTimeData$ORIGIN_AIRPORT_ID <- as.factor(onTimeData$ORIGIN_AIRPORT_ID)
+onTimeData$DAY_OF_WEEK <- as.factor(onTimeData$DAY_OF_WEEK)
+onTimeData$DEST <- as.factor(onTimeData$DEST)
+onTimeData$ORIGIN <- as.factor(onTimeData$ORIGIN)
+onTimeData$DEP_TIME_BLK <- as.factor(onTimeData$DEP_TIME_BLK)
+onTimeData$CARRIER <- as.factor(onTimeData$CARRIER)
+
+tapply(onTimeData$ARR_DEL15,onTimeData$ARR_DEL15,length)
+```
+
+The next step in predicting flight delays for many models is to split into Training (70%) and Testing (30%) data.
+We select variables: Origin and Destination, Day of Week, Carrier, Departure Time Block (late departure often means late arrival, gropued into 1 hour blocks). Plus the predictor Arrival Delay 15.
+Load in the caret package (Classification and Regression Training)
+install.packages('caret') if you haven't installed it before.
+
+```{r}
+library(caret)
+set.seed(100)
+featureCols <- c('ARR_DEL15','DAY_OF_WEEK','CARRIER','DEST','ORIGIN','DEP_TIME_BLK')
+onTimeDataFiltered <- onTimeData[,featureCols]
+# Percentage of Delayed and not should be same in training and testing, when you create partition, tell caret which variable should have an equal split.
+inTrainRows <- createDataPartition(onTimeDataFiltered$ARR_DEL15,p=0.7,list=FALSE)
+trainDataFiltered <- onTimeDataFiltered[inTrainRows,]
+testDataFiltered <-  onTimeDataFiltered[-inTrainRows,]
+nrow(trainDataFiltered)/(nrow(testDataFiltered)+nrow(trainDataFiltered))
+```
+
+save the trainingDataFiltered and the testDataFiltered into csv files and read them in, for further work with it.
+
+```{r}
+#write.csv(trainDataFiltered, file = "train.csv")
+#write.csv(testDataFiltered, file = "test.csv")
