@@ -84,5 +84,5 @@ nrow(trainDataFiltered)/(nrow(testDataFiltered)+nrow(trainDataFiltered))
 save the trainingDataFiltered and the testDataFiltered into csv files and read them in, for further work with it.
 
 ```{r}
-#write.csv(trainDataFiltered, file = "train.csv")
-#write.csv(testDataFiltered, file = "test.csv")
+write.csv(trainDataFiltered, file = "train.csv")
+write.csv(testDataFiltered, file = "test.csv")
