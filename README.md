@@ -7,6 +7,7 @@ train.csv and test.csv
 Two files with 70% (train) and 30% (test) of the data on flight delays. 
 
    X |ARR_DEL15| DAY_OF_WEEK |CARRIER| DEST| ORIGIN| DEP_TIME_BLK
+   ------------ | ------------ | ------------ | ------------ | ------------ | ----------- | -------------
 1  1|         0|           2|      AA|  LAX   | JFK   | 0900-0959
 2  3|        0|           2|      AA|  LAX    |JFK    |1200-1259
 3 10|         0|           2|      AA|  SFO    |JFK   | 0700-0759
