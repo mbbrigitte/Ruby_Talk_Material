@@ -76,7 +76,7 @@ logRegConfMat
 ## 
 ```
 
-###Specificity is really low! Improve model.
+####Specificity is really low! Improve model.
 
 See what s available with names(getModelInfo()) and then try boosted tree model gbm:
 see http://topepo.github.io/caret/training.html
