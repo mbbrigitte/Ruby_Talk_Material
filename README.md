@@ -7,13 +7,13 @@ To follow the exercise in class, you need to install R https://cran.r-project.or
 
 Two files with 70% (train) and 30% (test) of the data on flight delays. The data looks like this:
 
-X |ARR_DEL15| DAY_OF_WEEK |CARRIER| DEST| ORIGIN| DEP_TIME_BLK
------------- | ------------ | ------------ | ------------ | ------------ | ----------- | -------------
-1 |         0|           2|      AA|  LAX   | JFK   | 0900-0959
-3 |         0|           2|      AA|  LAX    |JFK    |1200-1259
-10|         0|           2|      AA|  SFO    |JFK   | 0700-0759
-12|         1|           2|      AA|  JFK    |SFO  |  1100-1159
-13|         0|           2|      AA|  SFO    |JFK |   0800-0859
+ARR_DEL15| DAY_OF_WEEK |CARRIER| DEST| ORIGIN| DEP_TIME_BLK
+ ------------ | ------------ | ------------ | ------------ | ----------- | -------------
+      0|           2|      AA|  LAX   | JFK   | 0900-0959
+      0|           2|      AA|  LAX    |JFK    |1200-1259
+      0|           2|      AA|  SFO    |JFK   | 0700-0759
+      1|           2|      AA|  JFK    |SFO  |  1100-1159
+      0|           2|      AA|  SFO    |JFK |   0800-0859
 ......
 
  :page_facing_up: predict_flightdelays.RMD is a R html markup file with the code to readin the data, train a model, test it on the test dataset and evaluate the statistics. If you don't have R, you can go to http://rpubs.com/mbbrigitte/ML_flight_delays to see the html document to follow.
