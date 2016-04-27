@@ -1,13 +1,16 @@
 ---
 title: "Predicting flight delays - Ruby Meetup"
 author: "Brigitte"
-date: "April 20, 2016"
-output: html_document
+date: "April 27, 2016"
+output: 
+  html_document: 
+    keep_md: yes
+    theme: cosmo
 ---
 
 ```{r}
 set.seed(100)
-setwd("~/R-scripts/Predict_Flights")
+setwd("~/GitHub/Ruby_Talk_Material")
 library(caret)
 trainData <- read.csv('train.csv',sep=',', header=TRUE)
 testData <- read.csv('test.csv',sep=',', header=TRUE)
@@ -16,6 +19,9 @@ trainData$ARR_DEL15 <- as.factor(trainData$ARR_DEL15)
 testData$ARR_DEL15 <- as.factor(testData$ARR_DEL15)
 trainData$DAY_OF_WEEK <- as.factor(trainData$DAY_OF_WEEK)
 testData$DAY_OF_WEEK <- as.factor(testData$DAY_OF_WEEK)
+trainData$X <- NULL
+testData$X <- NULL
+
 ```
 
 
@@ -25,7 +31,7 @@ Now we train the model. Use a rather simple algorith first to do the classificat
 Choose Logistic regression to start with. Basically a regression that predicts a binary value. 
 ```{r}
 library(caret)
-logisticRegModel <- train(ARR_DEL15 ~ ., data=trainData, method = 'glm', family = 'binomial') #the dot here stands for 'all available variables, i.e. all columns', glm is generalized linear regression, logistic regression, so set family to binomial
+logisticRegModel <- train(ARR_DEL15 ~ ., data=trainData, method = 'glm', family = 'binomial') #the dot here stands for 'all available variables, i.e. all columns', glm is generalized linear regression, we want logistic regression, i.e. set family to binomial
 
 ```
 
@@ -38,8 +44,9 @@ logRegConfMat
 
 ```
 
-Specificity is really low. Improve model, see what s available with names(getModelInfo()) and then try boosted tree model gbm:
-# see http://topepo.github.io/caret/training.html
+Specificity is really low. Improve model.
+See what s available with names(getModelInfo()) and then try boosted tree model gbm:
+see http://topepo.github.io/caret/training.html
 
 ```{r}
 fitControl <- trainControl(method = 'repeatedcv', number = 10, repeats = 10)
@@ -55,16 +62,6 @@ gbmConfMat
 
 
 ```
-
-
-
-
-```{r, echo=FALSE}
-plot(gbmFit1, metric = "Kappa", plotType = "level",
-     scales = list(x = list(rot = 90)))
-```
-
-
 
 
 
