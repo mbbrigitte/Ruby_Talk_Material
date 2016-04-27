@@ -11,13 +11,7 @@ library(caret)
 
 ```
 ## Warning: package 'caret' was built under R version 3.2.5
-```
-
-```
 ## Loading required package: lattice
-```
-
-```
 ## Loading required package: ggplot2
 ```
 
@@ -82,7 +76,8 @@ logRegConfMat
 ## 
 ```
 
-Specificity is really low. Improve model.
+###Specificity is really low! Improve model.
+
 See what s available with names(getModelInfo()) and then try boosted tree model gbm:
 see http://topepo.github.io/caret/training.html
 
@@ -94,89 +89,8 @@ gbmFit1 <- train(ARR_DEL15 ~ ., data=trainData, method = 'gbm',trControl = fitCo
 
 ```
 ## Loading required package: gbm
-```
 
 ```
-## Warning: package 'gbm' was built under R version 3.2.5
-```
-
-```
-## Loading required package: survival
-```
-
-```
-## 
-## Attaching package: 'survival'
-```
-
-```
-## The following object is masked from 'package:caret':
-## 
-##     cluster
-```
-
-```
-## Loading required package: splines
-```
-
-```
-## Loading required package: parallel
-```
-
-```
-## Loaded gbm 2.1.1
-```
-
-```
-## Loading required package: plyr
-```
-
-```r
-gbmFit1
-```
-
-```
-## Stochastic Gradient Boosting 
-## 
-## 23097 samples
-##     5 predictor
-##     2 classes: '0', '1' 
-## 
-## No pre-processing
-## Resampling: Cross-Validated (10 fold, repeated 10 times) 
-## Summary of sample sizes: 20786, 20788, 20788, 20786, 20788, 20788, ... 
-## Resampling results across tuning parameters:
-## 
-##   interaction.depth  n.trees  Accuracy   Kappa      
-##   1                   50      0.7608348  0.000000000
-##   1                  100      0.7609950  0.001187878
-##   1                  150      0.7617180  0.006800028
-##   2                   50      0.7639348  0.025748410
-##   2                  100      0.7666797  0.050503575
-##   2                  150      0.7677405  0.063563826
-##   3                   50      0.7661862  0.049266558
-##   3                  100      0.7677058  0.066772542
-##   3                  150      0.7684808  0.077685240
-## 
-## Tuning parameter 'shrinkage' was held constant at a value of 0.1
-## 
-## Tuning parameter 'n.minobsinnode' was held constant at a value of 10
-## Accuracy was used to select the optimal model using  the largest value.
-## The final values used for the model were n.trees = 150,
-##  interaction.depth = 3, shrinkage = 0.1 and n.minobsinnode = 10.
-```
-
-```r
-plot(gbmFit1)
-```
-
-![](predict_flightdelays_files/figure-html/unnamed-chunk-4-1.png)
-
-```r
-plot(gbmFit1, metric = "Kappa")
-```
-
-![](predict_flightdelays_files/figure-html/unnamed-chunk-4-2.png)
 
 ```r
 gbmPrediction <- predict(gbmFit1, testData)
@@ -213,6 +127,6 @@ gbmConfMat
 ## 
 ```
 
-
+The specificity increased a tiny bit. Need to do more! What about weather, would that be a good predictor for flight delays?
 
 
