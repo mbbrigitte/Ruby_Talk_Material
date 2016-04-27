@@ -16,7 +16,7 @@ ARR_DEL15| DAY_OF_WEEK |CARRIER| DEST| ORIGIN| DEP_TIME_BLK
       0|           2|      AA|  SFO    |JFK |   0800-0859
 ......
 
- :page_facing_up: predict_flightdelays.RMD is a R html markup file with the code to readin the data, train a model, test it on the test dataset and evaluate the statistics. If you don't have R, you can go to http://rpubs.com/mbbrigitte/ML_flight_delays to see the html document to follow.
+ :page_facing_up: predict_flightdelays.RMD is a R html markup file with the code to readin the data, train a model, test it on the test dataset and evaluate the statistics. If you don't have R, you can go to https://github.com/mbbrigitte/Ruby_Talk_Material/blob/master/predict_flightdelays.md to see the mark up online (or http://rpubs.com/mbbrigitte/ML_FlightDelayPrediction).
 
 
 Data you don't need but are used in the talk
