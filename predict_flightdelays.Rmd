@@ -52,15 +52,13 @@ see http://topepo.github.io/caret/training.html
 fitControl <- trainControl(method = 'repeatedcv', number = 10, repeats = 10)
 gbmFit1 <- train(ARR_DEL15 ~ ., data=trainData, method = 'gbm',trControl = fitControl,verbose = FALSE)
 
-gbmFit1
-plot(gbmFit1)
-plot(gbmFit1, metric = "Kappa")
 gbmPrediction <- predict(gbmFit1, testData)
 gbmConfMat <- confusionMatrix(gbmPrediction, testData[,"ARR_DEL15"])
 gbmConfMat
 
-
-
+#gbmFit1
+#plot(gbmFit1)
+#plot(gbmFit1, metric = "Kappa")
 ```
 
 
