@@ -1,7 +1,7 @@
 # Ruby Talk Material
 ## Data and Scripts for RubyTalk
 
-To follow the exercise in class, you need to install R https://cran.r-project.org/ (and RStudio https://www.rstudio.com/ recommended for Win/Mac) and the following files from the folder
+To follow the exercise in class, you can install R https://cran.r-project.org/ (and RStudio https://www.rstudio.com/ recommended for Win/Mac) or try to use RinRuby from your Ruby console and download the following files from the folder
 
  :floppy_disk: train.csv and  :floppy_disk: test.csv
 
